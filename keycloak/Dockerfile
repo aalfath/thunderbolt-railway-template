@@ -15,7 +15,8 @@ ENV KC_DB=postgres \
     KC_PROXY_HEADERS=xforwarded \
     KC_HOSTNAME_BACKCHANNEL_DYNAMIC=true
 
-RUN /opt/keycloak/bin/kc.sh build
+# Cap the build heap: the default sizes it from host memory and can fail in small builders.
+RUN JAVA_OPTS_KC_HEAP="-Xms64m -Xmx512m" /opt/keycloak/bin/kc.sh build
 
 EXPOSE 8080
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
