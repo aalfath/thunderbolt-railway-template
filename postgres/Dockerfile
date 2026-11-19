@@ -7,7 +7,9 @@ COPY --chmod=755 02-keycloak.sh /docker-entrypoint-initdb.d/
 
 # Railway mounts the volume at /var/lib/postgresql/data. A fresh volume holds lost+found,
 # so keep the cluster in a subfolder of it.
-ENV PGDATA=/var/lib/postgresql/data/pgdata
+ENV PGDATA=/var/lib/postgresql/data/pgdata \
+    POSTGRES_USER=postgres \
+    POSTGRES_DB=thunderbolt
 
 EXPOSE 5432
 # PowerSync replicates logically, so WAL must be logical.
