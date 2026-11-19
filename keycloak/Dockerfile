@@ -6,8 +6,11 @@ FROM ghcr.io/thunderbird/thunderbolt/thunderbolt-keycloak:0.1.168@sha256:aa2431f
 # Our realm: OIDC client only, self-registration off, and one first user from deploy variables.
 COPY --chown=1000:0 thunderbolt-realm.json /opt/keycloak/data/import/thunderbolt-realm.json
 
+# One instance: a local cache (the default clustered cache sees the old and new container
+# as a split-brain cluster during a redeploy and fails its health check).
 # The heap is capped so Keycloak doesn't size it from the host's memory (also used by the build below).
 ENV KC_DB=postgres \
+    KC_CACHE=local \
     KC_DB_USERNAME=postgres \
     KC_BOOTSTRAP_ADMIN_USERNAME=admin \
     JAVA_OPTS_KC_HEAP="-Xms64m -Xmx768m" \
